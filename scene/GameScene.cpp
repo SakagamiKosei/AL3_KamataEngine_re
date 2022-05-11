@@ -4,7 +4,10 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() 
+{
+
+}
 
 void GameScene::Initialize() {
 
@@ -16,13 +19,18 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-
+	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-
+	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+	
+
 }
 
-void GameScene::Update() {}
+void GameScene::Update()
+{
+
+}
 
 void GameScene::Draw() {
 
@@ -50,9 +58,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	// 3Dモデル描画
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
-
-
+	
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

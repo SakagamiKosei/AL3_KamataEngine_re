@@ -10,6 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -54,6 +55,7 @@ class GameScene {
 	WorldTransform worldTransform_;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
+
 
 	/// <summary>
 	/// ゲームシーン用
