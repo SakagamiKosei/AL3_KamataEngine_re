@@ -2,11 +2,13 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "AxisIndicator.h"
+#include "PrimitiveDrawer.h"
 
 GameScene::GameScene() {}
 
 GameScene::~GameScene() 
 {
+	delete model_;
 	delete debugCamera_;
 }
 
@@ -32,6 +34,9 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	
+	// ライン描画が参照するビュープロジェクションを指定する(アドレス渡し)
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 void GameScene::Update()
@@ -69,8 +74,12 @@ void GameScene::Draw() {
 	// 3Dモデル描画
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
+	// ライン描画が参照するビュープロジェクションを指定する(アドレス渡し)
+	PrimitiveDrawer::GetInstance()->DrawLine3d(Vector3(0,10,0),Vector3(0,-10,0), Vector4(0, 0, 100,100));
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
+
 #pragma endregion
 
 #pragma region 前景スプライト描画

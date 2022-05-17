@@ -57,8 +57,7 @@ class GameScene {
 	ViewProjection viewProjection_;
 	// デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
-
-
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
