@@ -11,6 +11,8 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include <random>
+// 自作した数学クラスを読み込む
+#include "MyMath.h"
 
 /// <summary>
 /// ゲームシーン
@@ -72,6 +74,8 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 	// デバックカメラ
 	DebugCamera* debugCamera_ = nullptr;
+	// 数学クラスのインスタンス
+	MyMath* myMath_ = nullptr;
 
 	// カメラ上方向の角度
 	float viewAngle = 0.0f;

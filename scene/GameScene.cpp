@@ -31,8 +31,9 @@ void GameScene::Initialize()
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
-#pragma region 乱数の準備
-	// 乱数シード生成器
+	// 数学を生成
+	myMath_ = new MyMath();
+
 	std::random_device seed_gen;
 	// メルセンヌ・ツイスターの乱数エンジン
 	std::mt19937_64 engine(seed_gen());
@@ -145,12 +146,12 @@ void GameScene::Initialize()
 
 #pragma endregion
 
-	// 親(0番)
-	worldTransforms_[0].Initialize();
-	// 子(1番)
-	worldTransforms_[1].Initialize();
-	worldTransforms_[1].translation_ = { 0,4.5f,0 };
-	worldTransforms_[1].parent_ = &worldTransforms_[0];
+	//// 親(0番)
+	//worldTransforms_[0].Initialize();
+	//// 子(1番)
+	//worldTransforms_[1].Initialize();
+	//worldTransforms_[1].translation_ = { 0,4.5f,0 };
+	//worldTransforms_[1].parent_ = &worldTransforms_[0];
 
 
 }
@@ -172,28 +173,31 @@ void GameScene::Update()
 #pragma endregion 
 
 #pragma region 連続変更
-	// Fov変更処理
-	{
-		// 上キーで視野角が広がる
-		if (input_->PushKey(DIK_UP))
-		{
-			viewProjection_.fovAngleY += 0.01f;
-			viewProjection_.fovAngleY = min(viewProjection_.fovAngleY, MathUtility::PI);
-			// 下キーで視野角が狭まる
-		}
-		else if (input_->PushKey(DIK_DOWN)) {
-			viewProjection_.fovAngleY -= 0.01f;
-			viewProjection_.fovAngleY = max(viewProjection_.fovAngleY, 0.01f);
-		}
+	// // Fov変更処理
+	//{
+	//	 // 上キーで視野角が広がる
+	//	if (input_->PushKey(DIK_UP))
+	//	{
+	//		viewProjection_.fovAngleY += 0.01f;
+	//		viewProjection_.fovAngleY = myMath_->MaxNum(0.01f, viewProjection_.fovAngleY);
+	//	
+	//    // 下キーで視野角が狭まる
+	//	}
+	//	else if (input_->PushKey(DIK_DOWN)) 
+	//	{
+	//		viewProjection_.fovAngleY -= 0.01f;
+	//		viewProjection_.fovAngleY = myMath_->MinNum(MathUtility::PI, viewProjection_.fovAngleY);
+	//	}
 
-		// 行列の再計算
-		viewProjection_.UpdateMatrix();
-		
-		// デバック用表示
-		debugText_->SetPos(50, 110);
-		debugText_->Printf("fovAngleY(Degree):%f", DirectX::XMConvertToDegrees(viewProjection_.fovAngleY));
+	//	/*viewProjection_.fovAngleY = myMath_->Clamp(0.01f, MathUtility::PI,viewProjection_.fovAngleY);*/
 
-	}
+	//	// 行列の再計算
+	//	viewProjection_.UpdateMatrix();
+	//	
+	//	 // デバック用表示
+	//	debugText_->SetPos(50, 110);
+	//	debugText_->Printf("fovAngleY(Degree):%f", DirectX::XMConvertToDegrees(viewProjection_.fovAngleY));
+	//}
 
 	// クリップ距離変更処理
 	{
@@ -238,13 +242,13 @@ void GameScene::Update()
 		//// ワールド行列を転送
 		//worldTransforms_[0].UpdateMatrix();
 
-		// デバック用表示
-		debugText_->SetPos(50, 150);
-		debugText_->Printf(
-			"Root:(%f,%f,%f)", worldTransforms_[0].translation_.x,
-			worldTransforms_[0].translation_.y,
-			worldTransforms_[0].translation_.z
-		);
+		//// デバック用表示
+		//debugText_->SetPos(50, 150);
+		//debugText_->Printf(
+		//	"Root:(%f,%f,%f)", worldTransforms_[0].translation_.x,
+		//	worldTransforms_[0].translation_.y,
+		//	worldTransforms_[0].translation_.z
+		//);
 
 		
 	}
@@ -276,16 +280,16 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	///// // 範囲forで全てのワールドトランスフォームを順に処理する
-	//for (WorldTransform& worldTransform : worldTransforms_)
-	//{
-	//	// 3Dモデル描画
-	//	model_->Draw(worldTransform,viewProjection_, textureHandle_);
-	//}
+	/// // 範囲forで全てのワールドトランスフォームを順に処理する
+	for (WorldTransform& worldTransform : worldTransforms_)
+	{
+		// 3Dモデル描画
+		model_->Draw(worldTransform,viewProjection_, textureHandle_);
+	}
 	// 
-	// for分で100個描画していた処理を置き換える
-	model_->Draw(worldTransforms_[0], viewProjection_, textureHandle_);
-	model_->Draw(worldTransforms_[1], viewProjection_, textureHandle_);
+	//// for分で100個描画していた処理を置き換える
+	//model_->Draw(worldTransforms_[0], viewProjection_, textureHandle_);
+	//model_->Draw(worldTransforms_[1], viewProjection_, textureHandle_);
 
 
 	// 3Dオブジェクト描画後処理
