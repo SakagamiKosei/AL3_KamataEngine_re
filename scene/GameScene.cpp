@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "AxisIndicator.h"
+#include <DirectXMath.h>
 
 GameScene::GameScene() {}
 
@@ -119,20 +120,39 @@ void GameScene::Initialize()
 	}
 #pragma endregion
 
-	// 視点
-	// カメラ視点座標を設定
-	viewProjection_.eye = { 0,0,-10 };
-	// カメラ注視点座標を設定
-	viewProjection_.target = { 10,0,0 };
-
-
-#pragma region 上方向ベクトル
-	// カメラ上方向ベクトルを設定(右上45度指定)
-	viewProjection_.up = { cosf(MathUtility::PI / 4.0f),sinf(MathUtility::PI / 4.0f),0.0f };
-
+#pragma region 垂直方向視野角
+	// カメラ垂直方向視野角を設定
+	viewProjection_.fovAngleY = DirectX::XMConvertToRadians(10.0f);
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 #pragma endregion
+
+#pragma region アスペクト比
+	// アスペクト比を設定
+	viewProjection_.aspectRatio = 1.0f;
+	// ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+#pragma endregion
+
+#pragma region ニアクリップ,ファークリップ
+	// ニアクリップ距離を設定
+	viewProjection_.nearZ = 52.0f;
+	// ファークリップ距離を設定
+	viewProjection_.farZ = 53.0f;
+
+	// ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
+#pragma endregion
+
+	// 親(0番)
+	worldTransforms_[0].Initialize();
+	// 子(1番)
+	worldTransforms_[1].Initialize();
+	worldTransforms_[1].translation_ = { 0,4.5f,0 };
+	worldTransforms_[1].parent_ = &worldTransforms_[0];
+
+
 }
 
 void GameScene::Update()
@@ -141,81 +161,92 @@ void GameScene::Update()
 	debugCamera_->Update();
 
 #pragma region 視点移動
-	// 視点移動処理
-	{
-		// 視点の移動ベクトル
-		Vector3 move = { 0,0,0 };
-		// 視点の移動速さ
-		const float kEyeSpeed = 0.2f;
-		// 押した方向で移動ベクトルを変更
-		if (input_->PushKey(DIK_W)) {
-			move = { 0,0,kEyeSpeed };
-		}
-		else if (input_->PushKey(DIK_S)) {
-			move = { 0,0,-kEyeSpeed };
-		}
-		// 視点移動(ベクトルの加算)
-		viewProjection_.eye += move;
-		// 行列の再計算
-		viewProjection_.UpdateMatrix();
-		// デバック用表示
-		debugText_->SetPos(50, 50);
-		debugText_->Printf(
-			"eye:(%f,%f,%f)", viewProjection_.eye.x,
-			viewProjection_.eye.y,
-			viewProjection_.eye.z
-		);
-	}
+
+	// デバック用表示
+	debugText_->SetPos(50, 50);
+	debugText_->Printf(
+		"eye:(%f,%f,%f)", viewProjection_.eye.x,
+		viewProjection_.eye.y,
+		viewProjection_.eye.z
+	);
 #pragma endregion 
 
-#pragma region 注視点移動
-	// 注視点移動処理
+#pragma region 連続変更
+	// Fov変更処理
 	{
-		// 注視点の移動ベクトル
+		// 上キーで視野角が広がる
+		if (input_->PushKey(DIK_UP))
+		{
+			viewProjection_.fovAngleY += 0.01f;
+			viewProjection_.fovAngleY = min(viewProjection_.fovAngleY, MathUtility::PI);
+			// 下キーで視野角が狭まる
+		}
+		else if (input_->PushKey(DIK_DOWN)) {
+			viewProjection_.fovAngleY -= 0.01f;
+			viewProjection_.fovAngleY = max(viewProjection_.fovAngleY, 0.01f);
+		}
+
+		// 行列の再計算
+		viewProjection_.UpdateMatrix();
+		
+		// デバック用表示
+		debugText_->SetPos(50, 110);
+		debugText_->Printf("fovAngleY(Degree):%f", DirectX::XMConvertToDegrees(viewProjection_.fovAngleY));
+
+	}
+
+	// クリップ距離変更処理
+	{
+		// 上下キーでニアクリップ距離を増減
+		if (input_->PushKey(DIK_UP)) {
+			viewProjection_.nearZ += 0.1f;
+		}
+		else if (input_->PushKey(DIK_DOWN)) {
+			viewProjection_.nearZ -= 0.1f;
+		}
+
+		// 行列の再計算
+		viewProjection_.UpdateMatrix();
+
+		// デバック用表示
+		debugText_->SetPos(50, 130);
+		debugText_->Printf("nearZ:%f", viewProjection_.nearZ);
+	}
+#pragma endregion
+
+	// キャラクター移動処理
+	{
+		// キャラクターの移動ベクトル
 		Vector3 move = { 0,0,0 };
-		// 注視点の移動速さ
-		const float kTargetSpeed = 0.2f;
+
+		// キャラクターの移動速さ
+		const float kCharacterSpeed = 0.2f;
+
 		// 押した方向で移動ベクトルを変更
+		// 左か右キーを押していたらmove(移動量)を変化させる
 		if (input_->PushKey(DIK_LEFT)) {
-			move = { -kTargetSpeed,0,0 };
+			move = { -kCharacterSpeed,0,0 };
 		}
 		else if (input_->PushKey(DIK_RIGHT)) {
-			move = { kTargetSpeed,0,0 };
+			move = { kCharacterSpeed,0,0 };
 		}
-		// 注視点移動(ベクトルの加算)
-		viewProjection_.target+= move;
-		// 行列の再計算
-		viewProjection_.UpdateMatrix();
-		// デバック用表示
-		debugText_->SetPos(50, 70);
-		debugText_->Printf(
-			"target:(%f,%f,%f)", viewProjection_.target.x,
-			viewProjection_.target.y,
-			viewProjection_.target.z
-		);
-	}
-#pragma endregion 
 
-#pragma region 上方向回転処理
-	// 上方向回転処理
-	{
-		// 上方向の回転速さ[ラジアン/frame]
-		const float kUpRotSpeed = 0.05f;
-		// 押した方向で移動ベクトルを変更
-		if (input_->PushKey(DIK_SPACE))
-		{
-			viewAngle += kUpRotSpeed;
-			// 2πを超えたら0に戻す
-			viewAngle = fmodf(viewAngle, MathUtility::PI * 2.0f);
-		}
-		// 上方向ベクトルを計算(半径1の円周上の座標)
-		viewProjection_.up = { cosf(viewAngle),sinf(viewAngle),0.0f };
-		// 行列の再計算
-		viewProjection_.UpdateMatrix();
+		// translationにmoveを加算する(移動)
+		worldTransforms_[0].translation_ += move;
+		// ワールド行列を計算する
+		worldTransforms_[0].matWorld_ *= worldTransforms_[0].matWorld_;
+		//// ワールド行列を転送
+		//worldTransforms_[0].UpdateMatrix();
+
 		// デバック用表示
-		debugText_->SetPos(50, 90);
+		debugText_->SetPos(50, 150);
 		debugText_->Printf(
-			"up:(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);
+			"Root:(%f,%f,%f)", worldTransforms_[0].translation_.x,
+			worldTransforms_[0].translation_.y,
+			worldTransforms_[0].translation_.z
+		);
+
+		
 	}
 }
 
@@ -245,12 +276,18 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	/// // 範囲forで全てのワールドトランスフォームを順に処理する
-	for (WorldTransform& worldTransform : worldTransforms_)
-	{
-		// 3Dモデル描画
-		model_->Draw(worldTransform,viewProjection_, textureHandle_);
-	}
+	///// // 範囲forで全てのワールドトランスフォームを順に処理する
+	//for (WorldTransform& worldTransform : worldTransforms_)
+	//{
+	//	// 3Dモデル描画
+	//	model_->Draw(worldTransform,viewProjection_, textureHandle_);
+	//}
+	// 
+	// for分で100個描画していた処理を置き換える
+	model_->Draw(worldTransforms_[0], viewProjection_, textureHandle_);
+	model_->Draw(worldTransforms_[1], viewProjection_, textureHandle_);
+
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
