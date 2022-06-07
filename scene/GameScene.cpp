@@ -16,13 +16,22 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-
+	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-
+	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	// カメラ視点座標を設定
+	viewProjection_.eye = { 0,0,-50 };
 }
 
-void GameScene::Update() {}
+void GameScene::Update()
+{
+	// 書式指定付き表示
+	debugText_->SetPos(50, 70);
+	debugText_->Printf("eye:(%f,%f,%f)", viewProjection_.eye.x,
+		viewProjection_.eye.y, viewProjection_.eye.z);
+}
 
 void GameScene::Draw() {
 
