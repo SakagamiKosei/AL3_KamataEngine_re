@@ -48,15 +48,17 @@ public: // メンバ関数
 public:
 	// パーツID
 	enum PartId {
-		Root, // 大元
-		Spine, // 脊髄
-		Chest, // 胸
-		Head, // 頭
-		ArmL, // 左腕
-		ArmR, // 右腕
-		Hip, // 尻
-		LegL, // 左足
-		LegR, // 右足
+		kRoot, // 大元
+		kSpine, // 脊髄
+		kChest, // 胸
+		kHead, // 頭
+		kArmL, // 左腕
+		kArmR, // 右腕
+		kHip, // 尻
+		kLegL, // 左足
+		kLegR, // 右足
+
+		kNumPartId
 	};
 
 private: // メンバ変数
