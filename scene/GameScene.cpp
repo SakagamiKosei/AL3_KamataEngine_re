@@ -378,7 +378,6 @@ void GameScene::Draw() {
 		model_->Draw(worldTransforms_[i], viewProjection_, textureHandle_);
 	}
 
-
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
