@@ -4,7 +4,11 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene()
+{
+	// 自キャラの解放
+	delete player_;
+}
 
 void GameScene::Initialize() {
 
@@ -12,8 +16,6 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
-	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	// ワールドトランスフォームの初期化
@@ -23,6 +25,11 @@ void GameScene::Initialize() {
 
 	// カメラ視点座標を設定
 	viewProjection_.eye = { 0,0,-50 };
+
+	// 自キャラの生成
+	player_ = new Player();
+
+	player_->Initialize(model_, textureHandle_);
 }
 
 void GameScene::Update()
@@ -31,6 +38,8 @@ void GameScene::Update()
 	debugText_->SetPos(50, 70);
 	debugText_->Printf("eye:(%f,%f,%f)", viewProjection_.eye.x,
 		viewProjection_.eye.y, viewProjection_.eye.z);
+
+	player_->Update();
 }
 
 void GameScene::Draw() {
@@ -59,8 +68,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
-
+	// 自キャラの描画
+	player_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
