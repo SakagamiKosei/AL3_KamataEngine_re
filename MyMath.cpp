@@ -9,7 +9,7 @@ MyMath::~MyMath() {}
 float MyMath::MinNum(float min, float num)
 {
 	// もし最小値より大きいなら
-	if (min < num)
+	if (num <= min)
 	{
 		// 最小値を返す
 		return min;
@@ -22,7 +22,7 @@ float MyMath::MinNum(float min, float num)
 float MyMath::MaxNum(float max, float num)
 {
 	// もし最大値より小さいなら
-	if (num < max)
+	if (max <= num)
 	{
 		// 最大値を返す
 		return max;
@@ -32,16 +32,16 @@ float MyMath::MaxNum(float max, float num)
 	return num;
 }
 
-float Clamp(float min, float max, float num)
+float MyMath::Clamp(float min, float max, float num)
 {
 	// もし最小値より大きいなら
-	if (min < num)
+	if (num <= min)
 	{
 		// 最小値を返す
 		return min;
 	}
 	// もし最大値より小さいなら
-	else if (num < max)
+	else if (num >= max)
 	{
 		// 最大値を返す
 		return max;
@@ -49,4 +49,11 @@ float Clamp(float min, float max, float num)
 	// これらの条件にあてはまらなければ
 	// 値を返す
 	return num;
+}
+
+float MyMath::ConvertToRadian(float degree)
+{
+	
+	const float PI = 3.1415f;
+	return degree * PI / 180;
 }

@@ -8,6 +8,8 @@
 #include "TextureManager.h"
 #include "VectorChange.h"
 #include "MyMath.h"
+#include "PlayerBullet.h"
+
 
 class Player {
 
@@ -21,7 +23,13 @@ public:
 /// <summary>
 ///  çXêV
 /// </summary>
+    void Rotate();
 	void Update();
+
+/// <summary>
+/// çUåÇ
+/// </summary>
+	void Attack();
 
 /// <summary>
 ///  ï`âÊ
@@ -42,5 +50,10 @@ private:
 
 	VectorChange* vectorChange_ = nullptr;
 	MyMath* myMath_ = nullptr;
+
+	// íe
+	PlayerBullet* bullet_ = nullptr;
+
+
 };
 

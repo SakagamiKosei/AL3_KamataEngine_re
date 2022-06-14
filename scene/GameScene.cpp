@@ -34,10 +34,10 @@ void GameScene::Initialize() {
 
 void GameScene::Update()
 {
-	// 書式指定付き表示
-	debugText_->SetPos(50, 70);
-	debugText_->Printf("eye:(%f,%f,%f)", viewProjection_.eye.x,
-		viewProjection_.eye.y, viewProjection_.eye.z);
+	//// 書式指定付き表示
+	//debugText_->SetPos(50, 70);
+	//debugText_->Printf("eye:(%f,%f,%f)", viewProjection_.eye.x,
+	//	viewProjection_.eye.y, viewProjection_.eye.z);
 
 	player_->Update();
 }

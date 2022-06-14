@@ -3,7 +3,7 @@
 
 VectorChange::VectorChange()
 {
-
+	
 }
 
 VectorChange::~VectorChange()

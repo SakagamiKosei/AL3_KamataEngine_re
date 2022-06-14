@@ -20,4 +20,5 @@ public:
 	float MinNum(float min, float num);
 	float MaxNum(float max, float num);
 	float Clamp(float min, float max, float num);
+	float ConvertToRadian(float degree);
 };
