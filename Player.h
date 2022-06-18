@@ -9,7 +9,8 @@
 #include "VectorChange.h"
 #include "MyMath.h"
 #include "PlayerBullet.h"
-
+#include <memory.h>
+#include <list>
 
 class Player {
 
@@ -52,8 +53,6 @@ private:
 	MyMath* myMath_ = nullptr;
 
 	// ’e
-	PlayerBullet* bullet_ = nullptr;
-
-
+	std::list<std::unique_ptr<PlayerBullet>>bullets_;
 };
 

@@ -64,23 +64,16 @@ void Player::Rotate()
 			worldTransform_.rotation_.y, worldTransform_.rotation_.z);
 
 		// 回転限界座標
-		/*const float kRoteLimitX = 45;*/
 		const float kRoteLimitY = 45.0f;
 
 
 		//// 座標移動(ベクトルの加算)
-		//worldTransform_.rotation_ += roteMove;
-
+		
 
 		// 範囲を超えない処理
-		/*worldTransform_.rotation_.x = myMath_->MinNum(worldTransform_.rotation_.x, +kRoteLimitX);
-		worldTransform_.rotation_.x = myMath_->MaxNum(worldTransform_.rotation_.x, -kRoteLimitX);*/
-
 
 		worldTransform_.rotation_.y = myMath_->Clamp(myMath_->ConvertToRadian(-kRoteLimitY), myMath_->ConvertToRadian(kRoteLimitY), worldTransform_.rotation_.y);
 
-		//worldTransform_.translation_.y = myMath_->MinNum(worldTransform_.translation_.y, +kMoveLimitY);
-		//worldTransform_.translation_.y = myMath_->MaxNum(worldTransform_.translation_.y, -kMoveLimitY);
 	}
 }
 
@@ -88,12 +81,15 @@ void Player::Attack()
 {
 	if (input_->PushKey(DIK_SPACE))
 	{
+		// 自キャラの座標をコピー
+		Vector3 position = worldTransform_.translation_;
+
 		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initalize(model_, worldTransform_.translation_);
+		std::unique_ptr<PlayerBullet>newBullet = std::make_unique<PlayerBullet>();
+		newBullet->Initalize(model_, position);
 
 		// 弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(std::move(newBullet));
 	}
 }
 
@@ -154,9 +150,10 @@ void Player::Update()
 	// キャラクター攻撃処理
 	Attack();
 
-	if (bullet_)
+	// 弾更新
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
-		bullet_->Update();
+		bullet->Update();
 	}
 	vectorChange_->MyUpdate(worldTransform_);
 
@@ -173,15 +170,14 @@ void Player::Update()
 }
 
 
-
-
 void Player::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	// 弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection_);
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
+	{
+		bullet->Draw(viewProjection_);
 	}
 }
 
