@@ -39,6 +39,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle)
 
 	myMath_ = new MyMath();
 
+
 }
 
 void Player::Rotate()
@@ -50,11 +51,11 @@ void Player::Rotate()
 
 		const float kChestRotSpeed = 0.02f;
 		// 押した方向で移動ベクトルを変更
-		if (input_->PushKey(DIK_LEFT)) 
+		if (input_->PushKey(DIK_I)) 
 		{
 			worldTransform_.rotation_.y += kChestRotSpeed;
 		}
-		else if (input_->PushKey(DIK_RIGHT)) 
+		else if (input_->PushKey(DIK_U)) 
 		{
 			worldTransform_.rotation_.y -= kChestRotSpeed;
 		}
@@ -72,30 +73,44 @@ void Player::Rotate()
 
 		// 範囲を超えない処理
 
-		worldTransform_.rotation_.y = myMath_->Clamp(myMath_->ConvertToRadian(-kRoteLimitY), myMath_->ConvertToRadian(kRoteLimitY), worldTransform_.rotation_.y);
+	/*	worldTransform_.rotation_.y = myMath_->Clamp(myMath_->ConvertToRadian(-kRoteLimitY), myMath_->ConvertToRadian(kRoteLimitY), worldTransform_.rotation_.y);*/
 
 	}
 }
 
 void Player::Attack()
 {
-	if (input_->PushKey(DIK_SPACE))
+	if (input_->TriggerKey(DIK_SPACE))
 	{
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		velocity = MathUtility::Vector3TransformNormal(velocity, worldTransform_.matWorld_);
+
 		// 自キャラの座標をコピー
 		Vector3 position = worldTransform_.translation_;
 
 		// 弾を生成し、初期化
 		std::unique_ptr<PlayerBullet>newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initalize(model_, position);
+		newBullet->Initalize(model_,position,velocity);
 
 		// 弾を登録する
 		bullets_.push_back(std::move(newBullet));
+
 	}
+
+
 }
 
 void Player::Update()
 {
-	
+	// デスフラグの立った弾を削除
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		return bullet->IsDead();
+		});
 	// キャラクター旋回処理
 	// 旋回(回転)
 	Rotate();
@@ -139,7 +154,7 @@ void Player::Update()
 
 		// 座標移動(ベクトルの加算)
 		worldTransform_.translation_ += move;
-
+	
 
 		// 範囲を超えない処理
 	
@@ -149,12 +164,14 @@ void Player::Update()
 
 	// キャラクター攻撃処理
 	Attack();
+	
 
 	// 弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
 		bullet->Update();
 	}
+
 	vectorChange_->MyUpdate(worldTransform_);
 
 	

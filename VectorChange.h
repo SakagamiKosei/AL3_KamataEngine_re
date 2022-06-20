@@ -6,7 +6,6 @@ class VectorChange
 public:
 	VectorChange();
 	~VectorChange();
-
 	Matrix4 MyScale(WorldTransform& worldTransform_);
 	Matrix4 MyRotationX(WorldTransform& worldTransform_);
 	Matrix4 MyRotationY(WorldTransform& worldTransform_);
