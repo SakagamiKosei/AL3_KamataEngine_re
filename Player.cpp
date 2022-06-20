@@ -69,7 +69,6 @@ void Player::Rotate()
 
 		//// 座標移動(ベクトルの加算)
 		
-
 		// 範囲を超えない処理
 
 		worldTransform_.rotation_.y = myMath_->Clamp(myMath_->ConvertToRadian(-kRoteLimitY), myMath_->ConvertToRadian(kRoteLimitY), worldTransform_.rotation_.y);
