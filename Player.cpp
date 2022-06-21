@@ -24,7 +24,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle)
 
 	// 引数として受け取ったデータをメンバ変数に記録する
 	// 3Dモデルの生成
-	model_ = model;
+	this->model_ = model;
 	// ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("player_shade.jpg");
 
@@ -108,7 +108,8 @@ void Player::Attack()
 void Player::Update()
 {
 	// デスフラグの立った弾を削除
-	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet)
+		{
 		return bullet->IsDead();
 		});
 	// キャラクター旋回処理
@@ -143,9 +144,6 @@ void Player::Update()
 		{
 			move = { 0,-kCharacterSpeed,0 };
 		}
-
-
-
 
 		// 移動限界座標
 		const float kMoveLimitX = 35;

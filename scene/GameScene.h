@@ -10,6 +10,9 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "DebugCamera.h"
+#include "Enemy.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -56,7 +59,13 @@ class GameScene {
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	Player* player_ = nullptr;
+	//Player* player_ = nullptr;
+
+	std::unique_ptr<Player>player_;
+	std::unique_ptr<Enemy>enemy_;
+	DebugCamera* debugCamera_ = nullptr;
+
+	bool isDebugCameraActive_ = false;
 
 	/// <summary>
 	/// ゲームシーン用
