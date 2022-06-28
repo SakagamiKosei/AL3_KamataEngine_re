@@ -6,31 +6,34 @@
 #include "DebugText.h"
 
 /// <summary>
-/// 自キャラの弾
+/// 敵キャラの弾
 /// </summary>
-class PlayerBullet 
+class EnemyBullet
 {
 public:
-	PlayerBullet();
-	~PlayerBullet();
+	EnemyBullet();
+	~EnemyBullet();
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="position">初期座標</param>
-	void Initalize(Model*model,const Vector3& position,const Vector3& velocity);
+	void Initalize(Model* model, const Vector3& position, const Vector3& velocity);
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection"></param>
 	void Draw(const ViewProjection& viewProjection);
+
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update();
+
+	/// <returns></returns>
 	bool IsDead()const { return isDead_; }
 private:
-	// ワールド変換データ
+	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	// モデルのポインタ(借りてくるやつ)
 	Model* model_ = nullptr;

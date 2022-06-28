@@ -48,7 +48,7 @@ private:
 	Input* input_ = nullptr;
 	// デバックテキスト
 	DebugText* debugText_ = nullptr;
-
+	// ベクトル変換
 	VectorChange* vectorChange_ = nullptr;
 	MyMath* myMath_ = nullptr;
 

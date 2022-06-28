@@ -36,6 +36,8 @@ void GameScene::Initialize() {
 
 	enemy_->Initialize(model_, textureHandle_);
 
+
+
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	// 軸方向表示の表示を有効にする

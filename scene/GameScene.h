@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "DebugCamera.h"
 #include "Enemy.h"
+#include "EnemyBullet.h"
 
 
 /// <summary>
@@ -63,6 +64,7 @@ class GameScene {
 
 	std::unique_ptr<Player>player_;
 	std::unique_ptr<Enemy>enemy_;
+	std::unique_ptr<EnemyBullet>enemyBullet_;
 	DebugCamera* debugCamera_ = nullptr;
 
 	bool isDebugCameraActive_ = false;
