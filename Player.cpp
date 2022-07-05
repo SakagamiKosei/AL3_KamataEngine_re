@@ -58,8 +58,8 @@ void Player::Rotate()
 		}
 
 		debugText_->SetPos(50, 70);
-		debugText_->Printf("PlayerRot:(%f,%f,%f)", worldTransform_.rotation_.x,
-			worldTransform_.rotation_.y, worldTransform_.rotation_.z);
+		debugText_->Printf("PlayerRot:(%f)", 
+			worldTransform_.rotation_.y);
 
 		// 回転限界座標
 		const float kRoteLimitY = 45.0f;
@@ -122,16 +122,19 @@ void Player::Update()
 
 		// キャラクターの移動速さ
 		const float kCharacterSpeed = 0.1f;
+		const float kChestRotSpeed = 0.001f;
 
 		// 押した方向で移動ベクトルを変更
 		// 左か右キーを押していたらmove(移動量)を変化させる
 		if (input_->PushKey(DIK_LEFT))
 		{
 			move = { -kCharacterSpeed,0,0 };
+			worldTransform_.rotation_.y += kChestRotSpeed;
 		}
 		else if (input_->PushKey(DIK_RIGHT))
 		{
 			move = { kCharacterSpeed,0,0 };
+			worldTransform_.rotation_.y -= kChestRotSpeed;
 		}
 		else if (input_->PushKey(DIK_UP))
 		{
@@ -145,16 +148,15 @@ void Player::Update()
 		// 移動限界座標
 		const float kMoveLimitX = 35;
 		const float kMoveLimitY = 20;
-
-
+		// 回転限界
+		const float kRotLimitY = 0.5f;
 		// 座標移動(ベクトルの加算)
 		worldTransform_.translation_ += move;
 	
 
 		// 範囲を超えない処理
-	
 		worldTransform_.translation_.x = myMath_->Clamp(-kMoveLimitX, kMoveLimitX,worldTransform_.translation_.x);
-
+		worldTransform_.rotation_.y = myMath_->Clamp(-kRotLimitY, kRotLimitY, worldTransform_.rotation_.y);
 	}
 
 	// キャラクター攻撃処理
