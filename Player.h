@@ -17,25 +17,25 @@ class Player {
 public:
 	Player();
 	~Player();
-/// <summary>
-///  初期化
-/// </summary>
-	void Initialize(Model* model,uint32_t textureHandle);
-/// <summary>
-///  更新
-/// </summary>
-    void Rotate();
+	/// <summary>
+	///  初期化
+	/// </summary>
+	void Initialize(Model* model, uint32_t textureHandle);
+	/// <summary>
+	///  更新
+	/// </summary>
+	void Rotate();
 	void Update();
 
-/// <summary>
-/// 攻撃
-/// </summary>
+	/// <summary>
+	/// 攻撃
+	/// </summary>
 	void Attack();
 
-/// <summary>
-///  描画
-/// </summary>
-	void Draw(ViewProjection &viewProjection_);
+	/// <summary>
+	///  描画
+	/// </summary>
+	void Draw(ViewProjection& viewProjection_);
 
 private:
 	// ワールド変換行列データ
@@ -48,11 +48,10 @@ private:
 	Input* input_ = nullptr;
 	// デバックテキスト
 	DebugText* debugText_ = nullptr;
-	// ベクトル変換
+
 	VectorChange* vectorChange_ = nullptr;
 	MyMath* myMath_ = nullptr;
 
 	// 弾
 	std::list<std::unique_ptr<PlayerBullet>>bullets_;
 };
-

@@ -36,7 +36,8 @@ void GameScene::Initialize() {
 
 	enemy_->Initialize(model_, textureHandle_);
 
-
+	// 敵キャラに自キャラのアドレスを渡す
+	enemy_->SetPlayer(player_.get());
 
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
