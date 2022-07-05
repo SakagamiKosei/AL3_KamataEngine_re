@@ -159,6 +159,16 @@ void Enemy::Draw(ViewProjection& viewProjection_)
 	}
 }
 
+Vector3 Enemy::GetWorldPosition()
+{
+	Vector3 worldPos;
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
+
 void Enemy::Fire()
 {
 	// ’e‚Ì‘¬“x
@@ -178,4 +188,7 @@ void Enemy::Fire()
 
 	// ’e‚ð“o˜^‚·‚é
 	bullets_.push_back(std::move(newBullet));
+
+	assert(player_);
+
 }

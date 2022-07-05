@@ -35,8 +35,6 @@ void Player::Initialize(Model* model, uint32_t textureHandle)
 	// ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
 	worldTransform_.Initialize();
 
-	//vectorChange_ = new VectorChange();
-
 	myMath_ = new MyMath();
 
 
@@ -196,3 +194,12 @@ void Player::Draw(ViewProjection& viewProjection_)
 	}
 }
 
+Vector3 Player::GetWorldPosition()
+{
+	Vector3 worldPos;
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}

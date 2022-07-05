@@ -104,6 +104,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="VectorChange.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -37,6 +37,8 @@ public:
 /// </summary>
 	void Draw(ViewProjection &viewProjection_);
 
+	Vector3 GetWorldPosition();
+
 private:
 	// ワールド変換行列データ
 	WorldTransform worldTransform_;

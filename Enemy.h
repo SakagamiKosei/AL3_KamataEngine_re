@@ -3,6 +3,12 @@
 #include "VectorChange.h"
 #include "DebugText.h"
 #include "EnemyBullet.h"
+#include "Player.h"
+
+// 自機クラスの前方宣言
+class Player;
+
+
 /// <summary>
 /// 敵
 /// </summary>
@@ -55,6 +61,10 @@ public:
 /// </summary>
 	void ApproachUpdate();
 
+	void SetPlayer(Player* player) { player_ = player; }
+
+	Vector3 GetWorldPosition();
+
 public:
 	// 発射間隔
 	static const int kFireInterval = 60;
@@ -76,4 +86,6 @@ private:
 	Phase phase_ = Phase::Approach;
 	// 発射タイマー
 	int32_t fireTimer_ = 0;
+	// 自キャラ
+	Player* player_ = nullptr;
 };
