@@ -1,9 +1,7 @@
 #pragma once
-#include <Model.h>
-#include "VectorChange.h"
+#include "Model.h"
 #include "DebugText.h"
 #include "EnemyBullet.h"
-#include "Player.h"
 
 // 自機クラスの前方宣言
 class Player;

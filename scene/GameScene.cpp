@@ -37,7 +37,6 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_, textureHandle_);
 
 
-
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	// 軸方向表示の表示を有効にする
@@ -51,11 +50,6 @@ void GameScene::Initialize() {
 
 void GameScene::Update()
 {
-	//// 書式指定付き表示
-	//debugText_->SetPos(50, 70);
-	//debugText_->Printf("eye:(%f,%f,%f)", viewProjection_.eye.x,
-	//	viewProjection_.eye.y, viewProjection_.eye.z);
-
 	// デバッグ切り替えの処理
 	if (input_->TriggerKey(DIK_P))
 	{
@@ -120,6 +114,8 @@ void GameScene::Draw() {
 
 	// 敵の描画
 	enemy_->Draw(viewProjection_);
+
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

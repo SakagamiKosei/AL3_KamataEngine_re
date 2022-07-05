@@ -37,7 +37,6 @@ void Player::Initialize(Model* model, uint32_t textureHandle)
 
 	myMath_ = new MyMath();
 
-
 }
 
 void Player::Rotate()

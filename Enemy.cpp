@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include "VectorChange.h"
+#include "Player.h"
 #include <cassert>
 Enemy::Enemy()
 {
@@ -17,8 +19,6 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
-	// NULLポインタチェック
-	assert(model);
 
 	// 引数として受け取ったデータをメンバ変数に記録する
 	// 3Dモデルの生成
@@ -32,7 +32,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 	// 敵の初期座標
 	worldTransform_.translation_ = { 0,2,30 };
 	// 敵のスケール
-	worldTransform_.scale_ = { 1,1,1};
+	worldTransform_.scale_ = { 1,1,1 };
 	//// 敵が発生すると同時に弾を発射する
 	//Fire();
 	// 接近フェーズ初期化
@@ -122,15 +122,25 @@ void Enemy::Update()
 		{
 			return bullet->IsDead();
 		});
+
+
 	switch (phase_) {
 	case Phase::Approach:
 	default:
 		ApproachMove();
+		ApproachUpdate();
+		// 敵の弾の座標を画面表示する処理
+		debugText_->SetPos(50, 110);
+		debugText_->Printf("Phase:Approach");
 		break;
 	case Phase::Leave:
 		LeaveMove();
+		// 敵の弾の座標を画面表示する処理
+		debugText_->SetPos(50, 110);
+		debugText_->Printf("Phase:Leave");
 		break;
 	}
+
 
 	// 弾更新
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_)
@@ -138,7 +148,6 @@ void Enemy::Update()
 		bullet->Update();
 	}
 
-	ApproachUpdate();
 
 	vectorChange_->MyUpdate(worldTransform_);
 
@@ -146,6 +155,9 @@ void Enemy::Update()
 	// 行列更新
 	// 行列の転送
 	worldTransform_.TransferMatrix();
+
+
+
 
 }
 
@@ -171,24 +183,40 @@ Vector3 Enemy::GetWorldPosition()
 
 void Enemy::Fire()
 {
+	assert(player_);
+
 	// 弾の速度
-	const float kBulletSpeed = 1.0f;
-	Vector3 velocity(0, 0, -kBulletSpeed);
+	float kBulletSpeed = 0.02f;
+
+	// 自キャラのワールド座標を取得する
+	Vector3 playerVec = player_->GetWorldPosition();
+	// 敵キャラのワールド座標を取得する
+	Vector3 enemyVec = GetWorldPosition();
+	// 敵キャラ→自キャラの差分ベクトルを求める
+	Vector3 Difference = playerVec;
+	Difference -= enemyVec;
+	//// ベクトルの正規化
+	Vector3 normalize(Difference);
+
+	//// ベクトルの長さを速さに合わせる
+	Difference *= kBulletSpeed;
+
+	Vector3 velocity(Difference);
 
 
-	// 速度ベクトルを自機の向きに合わせて回転させる
-	velocity = MathUtility::Vector3TransformNormal(velocity, worldTransform_.matWorld_);
+	//// 速度ベクトルを自機の向きに合わせて回転させる
+	//velocity = MathUtility::Vector3TransformNormal(velocity, worldTransform_.matWorld_);
 
-	// 自キャラの座標をコピー
-	Vector3 position = worldTransform_.translation_;
+	//// 自キャラの座標をコピー
+	//Vector3 position = worldTransform_.translation_;
 
 	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet>newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initalize(model_, position, velocity);
+	newBullet->Initalize(model_, worldTransform_.translation_, velocity);
 
 	// 弾を登録する
 	bullets_.push_back(std::move(newBullet));
 
-	assert(player_);
+
 
 }
