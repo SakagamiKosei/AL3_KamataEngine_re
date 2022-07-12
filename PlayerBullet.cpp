@@ -50,3 +50,8 @@ void PlayerBullet::Update()
 		isDead_ = true;
 	}
 }
+
+void PlayerBullet::OnCollision()
+{
+	isDead_ = false;
+}

@@ -3,6 +3,8 @@
 #include <cassert>
 #include "AxisIndicator.h"
 
+
+
 GameScene::GameScene() {}
 
 GameScene::~GameScene()
@@ -36,6 +38,9 @@ void GameScene::Initialize() {
 
 	enemy_->Initialize(model_, textureHandle_);
 
+	// 敵の弾の生成
+	enemyBullet_ = std::make_unique<EnemyBullet>();
+
 
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
@@ -46,7 +51,72 @@ void GameScene::Initialize() {
 	
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_.get());
+
+	collider_ = new Collider();
 }
+
+void GameScene::CheckAllCollisions()
+{
+	// 判定対象AとBの座標
+	Vector3 posA, posB;
+
+	// 判定対象AとBの半径
+	Vector3 radiusA, radiusB;
+
+	// 自弾リストの取得
+	const std::list<std::unique_ptr<PlayerBullet>>
+		& playerBullets = player_->GetBullets();
+
+	// 敵弾リストの取得
+	const std::list<std::unique_ptr<EnemyBullet>>
+		& enemyBullets = enemy_->GetBullets();
+
+#pragma region 自キャラと敵弾の当たり判定
+	// 自キャラの座標
+	posA = player_->GetWorldPosition();
+
+	// 自キャラの半径
+	radiusA = player_->GetRadius();
+
+	
+
+	//// 敵の弾の座標
+	//posB = enemyBullet_->GetWorldPosition();
+
+	// 自キャラと敵弾全ての当たり判定
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets)
+	{
+		float distance = (posB.x - posA.x) * (posB.x - posA.x)
+			+ (posB.y - posA.y) * (posB.y - posA.y)
+			+ (posB.z - posA.z) * (posB.z - posA.z);
+
+		float radius = (radiusA.x + radiusB.x) * (radiusA.x + radiusB.x);
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+		// 敵弾の半径
+		radiusB = bullet->GetRadius();
+
+		// 球と球の交差判定
+		if (collider_->OnBallCollision(posA.x, posA.y, posA.z,radiusA.x,
+			posB.x, posB.y, posB.z,radiusB.x) == true)
+		{
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+
+			// デバック用表示
+			debugText_->SetPos(50, 170);
+			debugText_->Printf(
+				"当たり");
+		}
+
+	}
+#pragma endregion
+
+
+}
+
 
 void GameScene::Update()
 {
@@ -115,7 +185,51 @@ void GameScene::Draw() {
 	// 敵の描画
 	enemy_->Draw(viewProjection_);
 
+	// 判定対象AとBの座標
+	Vector3 posA, posB;
 
+	// 判定対象AとBの半径
+	Vector3 radiusA, radiusB;
+
+	// 自弾リストの取得
+	const std::list<std::unique_ptr<PlayerBullet>>
+		& playerBullets = player_->GetBullets();
+
+	// 敵弾リストの取得
+	const std::list<std::unique_ptr<EnemyBullet>>
+		& enemyBullets = enemy_->GetBullets();
+
+	// 自キャラの座標
+	posA = player_->GetWorldPosition();
+
+	// 自キャラの半径
+	radiusA = player_->GetRadius();
+
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets)
+	{
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+		// 敵キャラの半径
+		radiusB = bullet->GetRadius();
+	
+	}
+
+	float distance = (posB.x - posA.x) * (posB.x - posA.x)
+		+ (posB.y - posA.y) * (posB.y - posA.y)
+		+ (posB.z - posA.z) * (posB.z - posA.z);
+
+	float radius = (radiusA.x + radiusB.x) * (radiusA.x + radiusB.x);
+
+
+	// デバック用表示
+	debugText_->SetPos(50, 150);
+	debugText_->Printf(
+		"distance:(%f)", distance);
+
+	// デバック用表示
+	debugText_->SetPos(50, 170);
+	debugText_->Printf(
+		"radius:(%f)", radius);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

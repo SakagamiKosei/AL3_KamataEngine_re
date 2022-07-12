@@ -37,6 +37,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle)
 
 	myMath_ = new MyMath();
 
+	worldTransform_.scale_ = { 1,1,1 };
+
 }
 
 void Player::Rotate()
@@ -203,4 +205,22 @@ Vector3 Player::GetWorldPosition()
 	worldPos.z = worldTransform_.translation_.z;
 
 	return worldPos;
+}
+
+Vector3 Player::GetRadius()
+{
+	Vector3 playerRadius;
+	// ‰¡‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	playerRadius.x = worldTransform_.scale_.x / 2;
+	// c‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	playerRadius.y = worldTransform_.scale_.y / 2;
+	// ‰œs‚«‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	playerRadius.z = worldTransform_.scale_.z / 2;
+
+	return playerRadius;
+}
+
+void Player::OnCollision()
+{
+	// ‰½‚à‚µ‚È‚¢
 }

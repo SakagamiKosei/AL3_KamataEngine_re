@@ -13,6 +13,7 @@
 #include "DebugCamera.h"
 #include "Enemy.h"
 #include "EnemyBullet.h"
+#include "Collider.h"
 
 
 /// <summary>
@@ -42,6 +43,11 @@ class GameScene {
 	void Update();
 
 	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllCollisions();
+
+	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();
@@ -60,6 +66,8 @@ class GameScene {
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
+	// 当たり判定クラス
+	Collider* collider_ = nullptr;
 	//Player* player_ = nullptr;
 
 	std::unique_ptr<Player>player_;

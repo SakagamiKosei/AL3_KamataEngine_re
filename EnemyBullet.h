@@ -32,6 +32,25 @@ public:
 
 	/// <returns></returns>
 	bool IsDead()const { return isDead_; }
+
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+	/// <summary>
+    /// 座標を取得する
+    /// </summary>
+    /// <returns></returns>
+	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// 半径を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetRadius();
+
+
 private:
 	// ワールドトランスフォーム
 	WorldTransform worldTransform_;

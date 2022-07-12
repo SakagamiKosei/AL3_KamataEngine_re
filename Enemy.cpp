@@ -167,7 +167,9 @@ void Enemy::Draw(ViewProjection& viewProjection_)
 	// ’e•`‰æ
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_)
 	{
-		bullet->Draw(viewProjection_);
+		
+			bullet->Draw(viewProjection_);
+		
 	}
 }
 
@@ -216,7 +218,9 @@ void Enemy::Fire()
 
 	// ’e‚ð“o˜^‚·‚é
 	bullets_.push_back(std::move(newBullet));
+}
 
-
-
+void Enemy::OnCollision()
+{
+	// ‰½‚à‚µ‚È‚¢
 }

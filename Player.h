@@ -37,7 +37,27 @@ public:
 /// </summary>
 	void Draw(ViewProjection &viewProjection_);
 
+	/// <summary>
+	/// 座標を取得する
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// 半径を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetRadius();
+
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+	// 弾リストを取得
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets()
+	{
+		return bullets_;
+	}
 
 private:
 	// ワールド変換行列データ
@@ -56,5 +76,6 @@ private:
 
 	// 弾
 	std::list<std::unique_ptr<PlayerBullet>>bullets_;
+	
 };
 

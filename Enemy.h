@@ -61,7 +61,20 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	/// <summary>
+	/// 座標を取得する
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+	// 弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>
+		& GetBullets() { return bullets_; }
 
 public:
 	// 発射間隔
@@ -80,6 +93,7 @@ private:
 	VectorChange* vectorChange_ = nullptr;
 	// 弾
 	std::list<std::unique_ptr<EnemyBullet>>bullets_;
+
 	// 初期フェーズ
 	Phase phase_ = Phase::Approach;
 	// 発射タイマー

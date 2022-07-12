@@ -33,6 +33,8 @@ void EnemyBullet::Initalize(Model* model, const Vector3& position,
 	// ˆø”‚Åó‚¯æ‚Á‚½‘¬“x‚ğƒƒ“ƒo•Ï”‚É‘ã“ü
 	velocity_ = velocity;
 
+	worldTransform_.scale_ = { 1,1,1 };
+
 }
 
 void EnemyBullet::Draw(const ViewProjection& viewProjection)
@@ -49,4 +51,32 @@ void EnemyBullet::Update()
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}
+}
+
+void EnemyBullet::OnCollision()
+{
+	isDead_ = false;
+}
+
+Vector3 EnemyBullet::GetWorldPosition()
+{
+	Vector3 worldPos;
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
+
+Vector3 EnemyBullet::GetRadius()
+{
+	Vector3 enemyBulletRadius;
+	// ‰¡‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	enemyBulletRadius.x = worldTransform_.scale_.x / 2;
+	// c‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	enemyBulletRadius.y = worldTransform_.scale_.y / 2;
+	// ‰œs‚«‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	enemyBulletRadius.z = worldTransform_.scale_.z / 2;
+
+	return enemyBulletRadius;
 }

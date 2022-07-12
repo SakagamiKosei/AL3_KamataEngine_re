@@ -29,6 +29,12 @@ public:
 	/// </summary>
 	void Update();
 	bool IsDead()const { return isDead_; }
+
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバック関数	
+	/// </summary>
+	void OnCollision();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
