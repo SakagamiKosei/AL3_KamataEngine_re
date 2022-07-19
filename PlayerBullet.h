@@ -35,6 +35,19 @@ public:
 	/// </summary>
 	void OnCollision();
 
+	/// <summary>
+    /// 座標を取得する
+    /// </summary>
+   /// <returns></returns>
+	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// 半径を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetRadius();
+
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;

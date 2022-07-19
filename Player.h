@@ -56,7 +56,7 @@ public:
 	// ’eƒŠƒXƒg‚ğæ“¾
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets()
 	{
-		return bullets_;
+		return playerBullets_;
 	}
 
 private:
@@ -75,7 +75,7 @@ private:
 	MyMath* myMath_ = nullptr;
 
 	// ’e
-	std::list<std::unique_ptr<PlayerBullet>>bullets_;
+	std::list<std::unique_ptr<PlayerBullet>>playerBullets_;
 	
 };
 

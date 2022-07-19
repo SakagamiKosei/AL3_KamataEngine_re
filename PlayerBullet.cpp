@@ -53,5 +53,28 @@ void PlayerBullet::Update()
 
 void PlayerBullet::OnCollision()
 {
-	isDead_ = false;
+	isDead_ = true;
+}
+
+Vector3 PlayerBullet::GetWorldPosition()
+{
+	Vector3 worldPos;
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
+
+Vector3 PlayerBullet::GetRadius()
+{
+	Vector3 PlayerBulletRadius;
+	// ‰¡‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	PlayerBulletRadius.x = worldTransform_.scale_.x / 2;
+	// c‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	PlayerBulletRadius.y = worldTransform_.scale_.y / 2;
+	// ‰œs‚«‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	PlayerBulletRadius.z = worldTransform_.scale_.z / 2;
+
+	return PlayerBulletRadius;
 }

@@ -74,6 +74,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		gameScene->Update();
 		// 軸表示の更新
 		axisIndicator->Update();
+		gameScene->CheckAllCollisions();
 
 		// 描画開始
 		dxCommon->PreDraw();

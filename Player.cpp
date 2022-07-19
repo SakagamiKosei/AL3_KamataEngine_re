@@ -97,7 +97,7 @@ void Player::Attack()
 		newBullet->Initalize(model_,position,velocity);
 
 		// ’e‚ğ“o˜^‚·‚é
-		bullets_.push_back(std::move(newBullet));
+		playerBullets_.push_back(std::move(newBullet));
 
 	}
 
@@ -107,7 +107,7 @@ void Player::Attack()
 void Player::Update()
 {
 	// ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½’e‚ğíœ
-	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet)
+	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet)
 		{
 		return bullet->IsDead();
 		});
@@ -166,7 +166,7 @@ void Player::Update()
 	
 
 	// ’eXV
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
+	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_)
 	{
 		bullet->Update();
 	}
@@ -191,7 +191,7 @@ void Player::Draw(ViewProjection& viewProjection_)
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
 	// ’e•`‰æ
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
+	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_)
 	{
 		bullet->Draw(viewProjection_);
 	}

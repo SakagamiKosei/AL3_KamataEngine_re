@@ -74,7 +74,13 @@ public:
 
 	// 弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>
-		& GetBullets() { return bullets_; }
+		& GetBullets() { return enemyBullets_; }
+
+	/// <summary>
+	/// 半径を取得する
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetRadius();
 
 public:
 	// 発射間隔
@@ -92,7 +98,7 @@ private:
 	// ベクトル変換
 	VectorChange* vectorChange_ = nullptr;
 	// 弾
-	std::list<std::unique_ptr<EnemyBullet>>bullets_;
+	std::list<std::unique_ptr<EnemyBullet>>enemyBullets_;
 
 	// 初期フェーズ
 	Phase phase_ = Phase::Approach;

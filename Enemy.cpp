@@ -30,7 +30,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 
 	debugText_ = DebugText::GetInstance();
 	// “G‚Ì‰ŠúÀ•W
-	worldTransform_.translation_ = { 0,2,30 };
+	worldTransform_.translation_ = { 0,2,50 };
 	// “G‚ÌƒXƒP[ƒ‹
 	worldTransform_.scale_ = { 1,1,1 };
 	//// “G‚ª”­¶‚·‚é‚Æ“¯‚É’e‚ğ”­Ë‚·‚é
@@ -60,7 +60,7 @@ void Enemy::ApproachMove()
 
 	if (worldTransform_.translation_.z < 0.0f)
 	{
-		phase_ = Phase::Leave;
+		worldTransform_.translation_.z = 0.0f;
 	}
 
 	//ƒLƒƒƒ‰ƒNƒ^[‚ÌÀ•W‚ğ‰æ–Ê•\¦‚·‚éˆ—
@@ -118,32 +118,34 @@ void Enemy::ApproachUpdate()
 void Enemy::Update()
 {
 	// ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½’e‚ğíœ
-	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
+	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
 		{
 			return bullet->IsDead();
 		});
 
 
-	switch (phase_) {
-	case Phase::Approach:
-	default:
-		ApproachMove();
-		ApproachUpdate();
-		// “G‚Ì’e‚ÌÀ•W‚ğ‰æ–Ê•\¦‚·‚éˆ—
-		debugText_->SetPos(50, 110);
-		debugText_->Printf("Phase:Approach");
-		break;
-	case Phase::Leave:
-		LeaveMove();
-		// “G‚Ì’e‚ÌÀ•W‚ğ‰æ–Ê•\¦‚·‚éˆ—
-		debugText_->SetPos(50, 110);
-		debugText_->Printf("Phase:Leave");
-		break;
-	}
+	//switch (phase_) {
+	//case Phase::Approach:
+	//default:
+	//	ApproachMove();
+	//	ApproachUpdate();
+	//	// “G‚Ì’e‚ÌÀ•W‚ğ‰æ–Ê•\¦‚·‚éˆ—
+	//	debugText_->SetPos(50, 110);
+	//	debugText_->Printf("Phase:Approach");
+	//	break;
+	//case Phase::Leave:
+	//	LeaveMove();
+	//	// “G‚Ì’e‚ÌÀ•W‚ğ‰æ–Ê•\¦‚·‚éˆ—
+	//	debugText_->SetPos(50, 110);
+	//	debugText_->Printf("Phase:Leave");
+	//	break;
+	//}
 
+		/*ApproachMove();*/
+		ApproachUpdate();
 
 	// ’eXV
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_)
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_)
 	{
 		bullet->Update();
 	}
@@ -156,16 +158,13 @@ void Enemy::Update()
 	// s—ñ‚Ì“]‘—
 	worldTransform_.TransferMatrix();
 
-
-
-
 }
 
 void Enemy::Draw(ViewProjection& viewProjection_)
 {
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	// ’e•`‰æ
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_)
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_)
 	{
 		
 			bullet->Draw(viewProjection_);
@@ -182,6 +181,21 @@ Vector3 Enemy::GetWorldPosition()
 
 	return worldPos;
 }
+
+
+Vector3 Enemy::GetRadius()
+{
+	Vector3 enemyRadius;
+	// ‰¡‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	enemyRadius.x = worldTransform_.scale_.x / 2;
+	// c‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	enemyRadius.y = worldTransform_.scale_.y / 2;
+	// ‰œs‚«‚Ì‘å‚«‚³‚ğ”¼•ª‚É‚µ‚Ä”¼Œa‚É‚·‚é
+	enemyRadius.z = worldTransform_.scale_.z / 2;
+
+	return enemyRadius;
+}
+
 
 void Enemy::Fire()
 {
@@ -217,7 +231,7 @@ void Enemy::Fire()
 	newBullet->Initalize(model_, worldTransform_.translation_, velocity);
 
 	// ’e‚ğ“o˜^‚·‚é
-	bullets_.push_back(std::move(newBullet));
+	enemyBullets_.push_back(std::move(newBullet));
 }
 
 void Enemy::OnCollision()
