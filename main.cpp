@@ -74,6 +74,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		gameScene->Update();
 		// 軸表示の更新
 		axisIndicator->Update();
+		// 当たり判定
 		gameScene->CheckAllCollisions();
 
 		// 描画開始
