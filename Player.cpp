@@ -59,6 +59,7 @@ void Player::Rotate()
 			worldTransform_.rotation_.y -= kChestRotSpeed;
 		}
 
+		// キャラクターの回転角度を画面表示する処理
 		debugText_->SetPos(50, 70);
 		debugText_->Printf("PlayerRot:(%f)", 
 			worldTransform_.rotation_.y);

@@ -81,11 +81,6 @@ void GameScene::CheckAllCollisions()
 	// 自キャラと敵弾全ての当たり判定
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets)
 	{
-		//float distance = (posB.x - posA.x) * (posB.x - posA.x)
-		//	+ (posB.y - posA.y) * (posB.y - posA.y)
-		//	+ (posB.z - posA.z) * (posB.z - posA.z);
-
-		//float radius = (radiusA.x + radiusB.x) * (radiusA.x + radiusB.x);
 		// 敵弾の座標
 		e_pos = bullet->GetWorldPosition();
 		// 敵弾の半径
@@ -113,11 +108,6 @@ void GameScene::CheckAllCollisions()
 	// 自弾と敵キャラ全ての当たり判定
 	for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets)
 	{
-		//float distance = (posB.x - posA.x) * (posB.x - posA.x)
-		//	+ (posB.y - posA.y) * (posB.y - posA.y)
-		//	+ (posB.z - posA.z) * (posB.z - posA.z);
-
-		//float radius = (radiusA.x + radiusB.x) * (radiusA.x + radiusB.x);
 		// 自弾の座標
 		pb_pos = bullet->GetWorldPosition();
 		// 自弾の半径
@@ -266,22 +256,10 @@ void GameScene::Draw() {
 	
 	}
 
-	float distance = (posB.x - posA.x) * (posB.x - posA.x)
-		+ (posB.y - posA.y) * (posB.y - posA.y)
-		+ (posB.z - posA.z) * (posB.z - posA.z);
-
-	float radius = (radiusA.x + radiusB.x) * (radiusA.x + radiusB.x);
-
-
-	// デバック用表示
-	debugText_->SetPos(50, 150);
-	debugText_->Printf(
-		"distance:(%f)", distance);
-
-	// デバック用表示
-	debugText_->SetPos(50, 170);
-	debugText_->Printf(
-		"radius:(%f)", radius);
+	//// デバック用表示
+	//debugText_->SetPos(50, 150);
+	//debugText_->Printf(
+	//	"enemyPos:(%f)",enemy_->GetWorldPosition());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
