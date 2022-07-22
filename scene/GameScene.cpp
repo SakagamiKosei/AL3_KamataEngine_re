@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "AxisIndicator.h"
 
 GameScene::GameScene() {}
 
@@ -30,6 +31,13 @@ void GameScene::Initialize() {
 	player_ = new Player();
 
 	player_->Initialize(model_, textureHandle_);
+
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+
+	// 軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 void GameScene::Update()
@@ -39,6 +47,37 @@ void GameScene::Update()
 	debugText_->Printf("eye:(%f,%f,%f)", viewProjection_.eye.x,
 		viewProjection_.eye.y, viewProjection_.eye.z);
 
+#ifdef _DEBUG
+	// カメラの処理
+    // デバッグ切り替えの処理
+	if (input_->TriggerKey(DIK_P))
+	{
+		isDebugCameraActive_ = !isDebugCameraActive_;
+	}
+#endif 
+
+	// カメラの処理
+	if (isDebugCameraActive_)
+	{
+		// 軸方向表示の表示を有効にする
+		AxisIndicator::GetInstance()->SetVisible(true);
+		// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
+		AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
+	}
+	else
+	{
+		// 軸方向表示の表示を無効にする
+		AxisIndicator::GetInstance()->SetVisible(false);
+		// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
+		AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+		viewProjection_.UpdateMatrix();
+		viewProjection_.TransferMatrix();
+	}
 	player_->Update();
 }
 

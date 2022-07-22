@@ -10,6 +10,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -61,4 +62,10 @@ class GameScene {
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	/// 
+	// デバックカメラ有効
+	bool isDebugCameraActive_ = false;
+	DebugCamera* debugCamera_ = nullptr;
+
+
 };
