@@ -14,7 +14,7 @@
 #include "Enemy.h"
 #include "EnemyBullet.h"
 #include "Collider.h"
-
+#include "Skydome.h"
 
 
 /// <summary>
@@ -77,6 +77,10 @@ class GameScene {
 	DebugCamera* debugCamera_ = nullptr;
 
 	bool isDebugCameraActive_ = false;
+
+	Skydome* skydome_ = nullptr;
+
+	Model* modelSkydome_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

@@ -9,7 +9,10 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene()
 {
-
+	delete debugCamera_;
+	delete collider_;
+	delete modelSkydome_;
+	delete skydome_;
 }
 
 void GameScene::Initialize() {
@@ -53,6 +56,10 @@ void GameScene::Initialize() {
 	enemy_->SetPlayer(player_.get());
 
 	collider_ = new Collider();
+
+	// 3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	skydome_->Initialize(modelSkydome_);
 }
 
 void GameScene::CheckAllCollisions()
@@ -193,6 +200,8 @@ void GameScene::Update()
 	player_->Update();
 
 	enemy_->Update();
+
+	skydome_->Update();
 }
 
 void GameScene::Draw() {
@@ -226,6 +235,8 @@ void GameScene::Draw() {
 
 	// 敵の描画
 	enemy_->Draw(viewProjection_);
+
+	skydome_->Draw(viewProjection_);
 
 	// 判定対象AとBの座標
 	Vector3 posA, posB;
