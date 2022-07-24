@@ -113,14 +113,11 @@ Matrix4 VectorChange::MyUpdate(WorldTransform& worldTransform_)
 	// スケーリング
 	Matrix4 matScale = VectorChange::MyScale(worldTransform_);
 	Matrix4 matRotationZ = VectorChange::MyRotationZ(worldTransform_);
-	Matrix4 matRotationX = VectorChange::MyRotationX(worldTransform_);;
+	Matrix4 matRotationX = VectorChange::MyRotationX(worldTransform_);
 	Matrix4 matRotationY = VectorChange::MyRotationY(worldTransform_);
 	Matrix4 matTrans = VectorChange::MyTranslation(worldTransform_);
 
 	worldTransform_.matWorld_ *= matScale;
-
-	worldTransform_.matWorld_ *= matRotationZ;
-
 
 	// 回転角Z
 	worldTransform_.matWorld_ *= matRotationZ;
