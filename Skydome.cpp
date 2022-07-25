@@ -1,6 +1,5 @@
 #include "Skydome.h"
 #include <cassert>
-
 Skydome::Skydome()
 {
 
@@ -8,30 +7,31 @@ Skydome::Skydome()
 
 Skydome::~Skydome()
 {
-
+	delete vectorChange_;
 }
-
-
 void Skydome::Initialize(Model* model)
 {
-	// NULLポインタチェック
+	worldTransform_.Initialize();
 	assert(model);
 
-	// 引数として受け取ったデータをメンバ変数に記録する
-	// 3Dモデルの生成
-	this->model_ = model;
+	model_ = model;
+
+
+	vectorChange_ = new VectorChange();
+	debugText_ = DebugText::GetInstance();
 
 	worldTransform_.translation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 500.0f,500.0f,500.0f };
-
-	// ワールド変換の初期化
-	worldTransform_.Initialize();
-	vectorChange_ = new VectorChange();
+	worldTransform_.scale_ = { 50,50,50 };
 }
+
 
 void Skydome::Update()
 {
 	vectorChange_->MyUpdate(worldTransform_);
+
+
+	debugText_->SetPos(70, 200);
+	debugText_->Printf("Skydome Pos:(% f, % f, % f)", worldTransform_.translation_.x, worldTransform_.translation_.y, worldTransform_.translation_.z);
 }
 
 void Skydome::Draw(ViewProjection& viewProjection_)

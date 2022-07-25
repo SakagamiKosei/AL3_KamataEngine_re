@@ -9,10 +9,9 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene()
 {
-	delete debugCamera_;
-	delete collider_;
 	delete modelSkydome_;
 	delete skydome_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
@@ -44,7 +43,6 @@ void GameScene::Initialize() {
 	// 敵の弾の生成
 	enemyBullet_ = std::make_unique<EnemyBullet>();
 
-
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	// 軸方向表示の表示を有効にする
@@ -57,8 +55,9 @@ void GameScene::Initialize() {
 
 	collider_ = new Collider();
 
-	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
 }
 
@@ -236,41 +235,8 @@ void GameScene::Draw() {
 	// 敵の描画
 	enemy_->Draw(viewProjection_);
 
+
 	skydome_->Draw(viewProjection_);
-
-	// 判定対象AとBの座標
-	Vector3 posA, posB;
-
-	// 判定対象AとBの半径
-	Vector3 radiusA, radiusB;
-
-	// 自弾リストの取得
-	const std::list<std::unique_ptr<PlayerBullet>>
-		& playerBullets = player_->GetBullets();
-
-	// 敵弾リストの取得
-	const std::list<std::unique_ptr<EnemyBullet>>
-		& enemyBullets = enemy_->GetBullets();
-
-	// 自キャラの座標
-	posA = player_->GetWorldPosition();
-
-	// 自キャラの半径
-	radiusA = player_->GetRadius();
-
-	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets)
-	{
-		// 敵弾の座標
-		posB = bullet->GetWorldPosition();
-		// 敵キャラの半径
-		radiusB = bullet->GetRadius();
-	
-	}
-
-	//// デバック用表示
-	//debugText_->SetPos(50, 150);
-	//debugText_->Printf(
-	//	"enemyPos:(%f)",enemy_->GetWorldPosition());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

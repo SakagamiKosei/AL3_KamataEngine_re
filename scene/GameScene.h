@@ -16,7 +16,6 @@
 #include "Collider.h"
 #include "Skydome.h"
 
-
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -79,8 +78,8 @@ class GameScene {
 	bool isDebugCameraActive_ = false;
 
 	Skydome* skydome_ = nullptr;
-
 	Model* modelSkydome_ = nullptr;
+
 
 	/// <summary>
 	/// ゲームシーン用
