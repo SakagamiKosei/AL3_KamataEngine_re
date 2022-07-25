@@ -15,6 +15,7 @@
 #include "EnemyBullet.h"
 #include "Collider.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -79,7 +80,10 @@ class GameScene {
 
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
+
+	std::unique_ptr<RailCamera>railCamera_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	
 };

@@ -58,6 +58,13 @@ void GameScene::Initialize() {
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
+
+	// レールカメラの生成
+	railCamera_ = std::make_unique<RailCamera>();
+	railCamera_->Initialize(Vector3(0, 0, -50), Vector3(0, 0, 0));
+
+	// 親子関係
+	player_->SetPlayer(railCamera_->GetWorldTransForm());
 }
 
 void GameScene::CheckAllCollisions()
@@ -200,6 +207,14 @@ void GameScene::Update()
 	enemy_->Update();
 
 	skydome_->Update();
+
+	railCamera_->Update();
+
+	// railCameraをゲームシーンのカメラに適応する
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+	// ビュープロジェクションの転送
+	viewProjection_.TransferMatrix();
 }
 
 void GameScene::Draw() {
@@ -235,9 +250,6 @@ void GameScene::Draw() {
 
 	// 敵の描画
 	enemy_->Draw(viewProjection_);
-
-	
-
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

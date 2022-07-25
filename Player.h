@@ -59,6 +59,8 @@ public:
 		return playerBullets_;
 	}
 
+	void SetPlayer(WorldTransform* worldTransform) { worldTransform_.parent_ = worldTransform; }
+
 private:
 	// ワールド変換行列データ
 	WorldTransform worldTransform_;
