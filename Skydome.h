@@ -20,6 +20,6 @@ private:
 	Model* model_ = nullptr;
 
 	VectorChange* vectorChange_ = nullptr;
-
+	
 	DebugText* debugText_ = nullptr;
 };
