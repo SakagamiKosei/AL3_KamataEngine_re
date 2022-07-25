@@ -113,11 +113,6 @@ void GameScene::CheckAllCollisions()
 	// 自弾と敵キャラ全ての当たり判定
 	for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets)
 	{
-		//float distance = (posB.x - posA.x) * (posB.x - posA.x)
-		//	+ (posB.y - posA.y) * (posB.y - posA.y)
-		//	+ (posB.z - posA.z) * (posB.z - posA.z);
-
-		//float radius = (radiusA.x + radiusB.x) * (radiusA.x + radiusB.x);
 		// 自弾の座標
 		pb_pos = bullet->GetWorldPosition();
 		// 自弾の半径
