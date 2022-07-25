@@ -9,22 +9,22 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "DebugCamera.h"
 #include "Player.h"
-#include "MyMath.h"
+#include "DebugCamera.h"
 #include "Enemy.h"
 #include "EnemyBullet.h"
+#include "Collider.h"
 #include "Skydome.h"
-#include"Collider.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 
-public: // メンバ関数
-  /// <summary>
-  /// コンストクラタ
-  /// </summary>
+  public: // メンバ関数
+	/// <summary>
+	/// コンストクラタ
+	/// </summary>
 	GameScene();
 
 	/// <summary>
@@ -43,34 +43,43 @@ public: // メンバ関数
 	void Update();
 
 	/// <summary>
-	/// 描画
-	/// </summary>
-	void Draw();
-
-	/// <summary>
 	/// 衝突判定と応答
 	/// </summary>
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
 
-private: // メンバ変数
+  private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
-	Model* model_ = nullptr;
 	DebugText* debugText_ = nullptr;
-	uint32_t textureHandle_ = 0;//テクスチャハンドル
-	DebugCamera* debugCamera_ = nullptr;//デバッグカメラ
-	Collider* collider_ = nullptr;
-	ViewProjection viewProjection_;//ビュープロジェクション
+	// テクスチャハンドル
+	uint32_t textureHandle_ = 0;
+	// 3Dモデル
+	Model* model_ = nullptr;
+	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+
+	// 当たり判定クラス
+	Collider* collider_ = nullptr;
+	//Player* player_ = nullptr;
+
 	std::unique_ptr<Player>player_;
 	std::unique_ptr<Enemy>enemy_;
 	std::unique_ptr<EnemyBullet>enemyBullet_;
-	Skydome* skydome_ = nullptr;
-	Model* modelSkydome_ = nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 
 	bool isDebugCameraActive_ = false;
 
-	
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 };

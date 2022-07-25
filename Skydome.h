@@ -3,7 +3,7 @@
 #include "ViewProjection.h"
 #include "Model.h"
 #include "VectorChange.h"
-#include "DebugText.h"
+
 class Skydome {
 
 public:
@@ -21,5 +21,4 @@ private:
 
 	VectorChange* vectorChange_ = nullptr;
 	
-	DebugText* debugText_ = nullptr;
 };

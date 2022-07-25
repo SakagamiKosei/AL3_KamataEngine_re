@@ -18,7 +18,6 @@ void Skydome::Initialize(Model* model)
 
 
 	vectorChange_ = new VectorChange();
-	debugText_ = DebugText::GetInstance();
 
 	worldTransform_.translation_ = { 0,0,0 };
 	worldTransform_.scale_ = { 50,50,50 };
@@ -28,10 +27,6 @@ void Skydome::Initialize(Model* model)
 void Skydome::Update()
 {
 	vectorChange_->MyUpdate(worldTransform_);
-
-
-	debugText_->SetPos(70, 200);
-	debugText_->Printf("Skydome Pos:(% f, % f, % f)", worldTransform_.translation_.x, worldTransform_.translation_.y, worldTransform_.translation_.z);
 }
 
 void Skydome::Draw(ViewProjection& viewProjection_)
