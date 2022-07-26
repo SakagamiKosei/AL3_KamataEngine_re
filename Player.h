@@ -59,9 +59,8 @@ public:
 		return playerBullets_;
 	}
 
-	void SetPlayer(WorldTransform* worldTransform) { worldTransform_.parent_ = worldTransform; }
+	void SetRailCamera(const WorldTransform& worldTransform) { worldTransform_.parent_ = &worldTransform; }
 
-	Vector3 transform(const Vector3& velocity, const Matrix4& matWorld);
 
 private:
 	// ワールド変換行列データ

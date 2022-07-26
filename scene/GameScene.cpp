@@ -61,10 +61,11 @@ void GameScene::Initialize() {
 
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
+	// レールカメラの初期化
 	railCamera_->Initialize(Vector3(0, 0, -50), Vector3(0, 0, 0));
 
 	// 自キャラとレールカメラの親子関係を結ぶ
-	player_->SetPlayer(railCamera_->GetWorldTransform());
+	player_->SetRailCamera(railCamera_->GetWorldMatrix());
 }
 
 void GameScene::CheckAllCollisions()
@@ -202,10 +203,12 @@ void GameScene::Update()
 		viewProjection_.UpdateMatrix();
 		viewProjection_.TransferMatrix();
 	}
+	// レールカメラの更新
 	railCamera_->Update();
 	// railCameraをゲームシーンのカメラに適応する
 	viewProjection_.matView = railCamera_->GetViewProjection().matView;
 	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+
 	// ビュープロジェクションの転送
 	viewProjection_.TransferMatrix();
 

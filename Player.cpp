@@ -39,6 +39,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle)
 
 	worldTransform_.scale_ = { 1,1,1 };
 
+	worldTransform_.translation_ = { 0,0,50 };
+
 }
 
 void Player::Rotate()
@@ -174,11 +176,13 @@ void Player::Update()
 
 	vectorChange_->MyUpdate(worldTransform_);
 
-	
-	// 行列更新
-	// 行列の転送
-	worldTransform_.TransferMatrix();
 
+	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
+	
+
+	// 行列更新
+    // 行列の転送
+	worldTransform_.TransferMatrix();
 	 //キャラクターの座標を画面表示する処理
 	debugText_->SetPos(50, 50);
 	debugText_->Printf("PlayerPos:(%f,%f,%f)", worldTransform_.translation_.x,
@@ -226,13 +230,3 @@ void Player::OnCollision()
 	// 何もしない
 }
 
-Vector3 transform(const Vector3& velocity, const Matrix4& matWorld)
-{
-	Vector3 result;
-	
-		result.x = velocity.x * matWorld.m[0][0] + velocity.y * matWorld.m[1][0] + velocity.z * matWorld.m[2][0] + matWorld.m[3][0];
-	    result.y = velocity.x * matWorld.m[0][1] + velocity.y * matWorld.m[1][1] + velocity.z * matWorld.m[2][1] + matWorld.m[3][1];
-		result.z = velocity.x * matWorld.m[0][2] + velocity.y * matWorld.m[1][2] + velocity.z * matWorld.m[2][2] + matWorld.m[3][2];
-	
-	return result;
-}

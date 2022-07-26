@@ -20,7 +20,7 @@ void Skydome::Initialize(Model* model)
 	vectorChange_ = new VectorChange();
 
 	worldTransform_.translation_ = { 0,0,0 };
-	worldTransform_.scale_ = { 50,50,50 };
+	worldTransform_.scale_ = { 100,100,100 };
 }
 
 

@@ -33,8 +33,6 @@ public:
 	//ワールド行列の取得
 	const WorldTransform& GetWorldMatrix()const { return worldTransform_; }
 
-	WorldTransform* GetWorldTransform() { return &worldTransform_; }
-
 
 private:
 	//ワールド変換データ
