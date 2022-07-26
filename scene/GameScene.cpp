@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
-	
+
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_.get());
 
@@ -63,17 +63,17 @@ void GameScene::Initialize() {
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize(Vector3(0, 0, -50), Vector3(0, 0, 0));
 
-	// 親子関係
-	player_->SetPlayer(railCamera_->GetWorldTransForm());
+	// 自キャラとレールカメラの親子関係を結ぶ
+	player_->SetPlayer(railCamera_->GetWorldTransform());
 }
 
 void GameScene::CheckAllCollisions()
 {
 	// 判定対象の座標
-	Vector3 p_pos, e_pos,pb_pos,eb_pos;
+	Vector3 p_pos, e_pos, pb_pos, eb_pos;
 
 	// 判定対象の半径
-	Vector3 p_radius, e_radius,pb_radius,eb_radius;
+	Vector3 p_radius, e_radius, pb_radius, eb_radius;
 
 	// 自弾リストの取得
 	const std::list<std::unique_ptr<PlayerBullet>>
@@ -99,8 +99,8 @@ void GameScene::CheckAllCollisions()
 		e_radius = bullet->GetRadius();
 
 		// 球と球の交差判定
-		if (collider_->OnBallCollision(p_pos.x, p_pos.y, p_pos.z,p_radius.x,
-			e_pos.x, e_pos.y, e_pos.z,e_radius.x) == true)
+		if (collider_->OnBallCollision(p_pos.x, p_pos.y, p_pos.z, p_radius.x,
+			e_pos.x, e_pos.y, e_pos.z, e_radius.x) == true)
 		{
 			// 自キャラの衝突時コールバックを呼び出す
 			player_->OnCollision();
@@ -179,7 +179,7 @@ void GameScene::Update()
 	{
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
-	
+
 	// カメラの処理
 	if (isDebugCameraActive_)
 	{
@@ -202,19 +202,19 @@ void GameScene::Update()
 		viewProjection_.UpdateMatrix();
 		viewProjection_.TransferMatrix();
 	}
+	railCamera_->Update();
+	// railCameraをゲームシーンのカメラに適応する
+	viewProjection_.matView = railCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+	// ビュープロジェクションの転送
+	viewProjection_.TransferMatrix();
+
 	player_->Update();
 
 	enemy_->Update();
 
 	skydome_->Update();
 
-	railCamera_->Update();
-
-	// railCameraをゲームシーンのカメラに適応する
-	viewProjection_.matView = railCamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
-	// ビュープロジェクションの転送
-	viewProjection_.TransferMatrix();
 }
 
 void GameScene::Draw() {

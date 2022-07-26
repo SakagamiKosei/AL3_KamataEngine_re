@@ -201,9 +201,9 @@ void Player::Draw(ViewProjection& viewProjection_)
 Vector3 Player::GetWorldPosition()
 {
 	Vector3 worldPos;
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }
@@ -224,4 +224,15 @@ Vector3 Player::GetRadius()
 void Player::OnCollision()
 {
 	// ‰½‚à‚µ‚È‚¢
+}
+
+Vector3 transform(const Vector3& velocity, const Matrix4& matWorld)
+{
+	Vector3 result;
+	
+		result.x = velocity.x * matWorld.m[0][0] + velocity.y * matWorld.m[1][0] + velocity.z * matWorld.m[2][0] + matWorld.m[3][0];
+	    result.y = velocity.x * matWorld.m[0][1] + velocity.y * matWorld.m[1][1] + velocity.z * matWorld.m[2][1] + matWorld.m[3][1];
+		result.z = velocity.x * matWorld.m[0][2] + velocity.y * matWorld.m[1][2] + velocity.z * matWorld.m[2][2] + matWorld.m[3][2];
+	
+	return result;
 }
