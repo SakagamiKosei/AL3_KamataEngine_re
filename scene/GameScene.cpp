@@ -20,9 +20,14 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
+
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	// スカイドームの生成
+	skydome_ = new Skydome();
+	// スカイドームの初期化
+	skydome_->Initialize(modelSkydome_);
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化
@@ -33,17 +38,21 @@ void GameScene::Initialize() {
 
 	// 自キャラの生成
 	player_ = std::make_unique<Player>();
-
+	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
 	// 敵の生成
 	enemy_ = std::make_unique<Enemy>();
-
+	// 敵の初期化
 	enemy_->Initialize(model_, textureHandle_);
 
 	// 敵の弾の生成
 	enemyBullet_ = std::make_unique<EnemyBullet>();
 
+	// 敵キャラに自キャラのアドレスを渡す
+	enemy_->SetPlayer(player_.get());
+
+	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	// 軸方向表示の表示を有効にする
@@ -51,19 +60,14 @@ void GameScene::Initialize() {
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
-	// 敵キャラに自キャラのアドレスを渡す
-	enemy_->SetPlayer(player_.get());
 
+	// 当たり判定の生成
 	collider_ = new Collider();
-
-	skydome_ = new Skydome();
-	skydome_->Initialize(modelSkydome_);
 
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
 	// レールカメラの初期化
 	railCamera_->Initialize(Vector3(0, 0, -50), Vector3(0, 0, 0));
-
 	// 自キャラとレールカメラの親子関係を結ぶ
 	player_->SetRailCamera(railCamera_->GetWorldMatrix());
 }
@@ -148,14 +152,14 @@ void GameScene::CheckAllCollisions()
 	{
 		for (const std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets)
 		{
-			// 自弾の座標
+			// 自弾の座標を受け取る
 			pb_pos = playerBullet->GetWorldPosition();
-			// 自弾の半径
+			// 自弾の半径を受け取る
 			pb_radius = playerBullet->GetRadius();
 
-			// 敵弾の座標
+			// 敵弾の座標を受け取る
 			eb_pos = enemyBullet->GetWorldPosition();
-			// 敵弾の半径
+			// 敵弾の半径を受け取る
 			eb_radius = enemyBullet->GetRadius();
 
 			// 球と球の交差判定

@@ -18,7 +18,7 @@ void RailCamera::Initialize(const Vector3& position, const Vector3& rotation)
 	// 引数でワールド座標を受け取ってワールドトランスフォームに設定
 	worldTransform_.translation_ = position;
 	// 引数で回転角[ラジアン]を受けとってワールドトランスフォームに設定
-	/*worldTransform_.rotation_ = rotation*/
+	worldTransform_.rotation_ = rotation;
 
 	//ビュープロジェクションの初期化
 	viewProjection_.farZ = 2000.0f;

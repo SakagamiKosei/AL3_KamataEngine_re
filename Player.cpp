@@ -93,7 +93,7 @@ void Player::Attack()
 		velocity = MathUtility::Vector3TransformNormal(velocity, worldTransform_.matWorld_);
 
 		// 自キャラの座標をコピー
-		Vector3 position = worldTransform_.translation_;
+		Vector3 position = this->GetWorldPosition();
 
 		// 弾を生成し、初期化
 		std::unique_ptr<PlayerBullet>newBullet = std::make_unique<PlayerBullet>();
@@ -103,7 +103,6 @@ void Player::Attack()
 		playerBullets_.push_back(std::move(newBullet));
 
 	}
-
 
 }
 
